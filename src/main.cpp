@@ -24,9 +24,10 @@ ASTNode parseSource(const std::string& source) {
 
 std::string generateAsm(const ASTNode& node) {
 	std::stringstream ss;
-	ss << ".section .text\n"
-	   << ".global _start\n"
-	   << "_start:\n"
+	ss << ".section .note.GNU-stack,\"\",@progbits\n"
+	   << ".section .text\n"
+	   << ".global main\n"
+	   << "main:\n"
 	   << "    mov $60, %rax\n"
 	   << "    mov $" << node.exitCode << ", %rdi\n"
 	   << "    syscall\n";
@@ -73,27 +74,19 @@ int main(int argc, char* argv[]) {
 	asmFile << asmCode;
     asmFile.close();
 
-	std::string objectFilename = "temp.o";
 	std::string outputFilename = "output";
-	std::string command = "as -o " + objectFilename + " " + asmFilename;
+	std::string command = "gcc -o " + outputFilename + " " + asmFilename;
 	if (system(command.c_str()) != 0) {
 		std::cerr << "Error: Failed to compile assembly" << std::endl;
         return 1;
 	}
 
-	command = "ld -o " + outputFilename + " " + objectFilename;
-	if (system(command.c_str()) != 0) {
-		std::cerr << "Error: Failed to link object file" << std::endl;
-        return 1;
-	}
-
-	std::cout << "Comilation finished. Executable: " << outputFilename << std::endl;
+	std::cout << "Comilation finished.\nExecutable: " << outputFilename << std::endl;
 
     if (argc >= 3) {
 		std::string option = argv[2];
 		if (option == "--clean") {
 			remove(asmFilename.c_str());
-			remove(objectFilename.c_str());
 		}
 	}
 
