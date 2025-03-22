@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	asmFile << asmCode;
-    asmFile.close();
+	asmFile.close();
 
 	std::string outputFilename = "output";
 	std::string command = "gcc -o " + outputFilename + " " + asmFilename;
