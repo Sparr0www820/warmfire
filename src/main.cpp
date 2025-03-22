@@ -37,7 +37,7 @@ std::string generateAsm(const ASTNode& node) {
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
 		std::cerr << "Usage: " << argv[0] << " <file.wf> [--clean]" << std::endl;
-        return 1;
+		return 1;
 	}
 
 	std::string filename = argv[1];
@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
 
 	std::stringstream buffer;
 	buffer << infile.rdbuf();
-    std::string source = buffer.str();
-    
+	std::string source = buffer.str();
+	
 	ASTNode ast;
 	try {
 		ast = parseSource(source);
@@ -78,12 +78,12 @@ int main(int argc, char* argv[]) {
 	std::string command = "gcc -o " + outputFilename + " " + asmFilename;
 	if (system(command.c_str()) != 0) {
 		std::cerr << "Error: Failed to compile assembly" << std::endl;
-        return 1;
+		return 1;
 	}
 
 	std::cout << "Comilation finished.\nExecutable: " << outputFilename << std::endl;
 
-    if (argc >= 3) {
+	if (argc >= 3) {
 		std::string option = argv[2];
 		if (option == "--clean") {
 			remove(asmFilename.c_str());
