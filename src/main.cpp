@@ -33,9 +33,8 @@ struct ASTNode {
 };
 
 ASTNode parseSource(const std::string& source) {
-	std::regex pattern(R"(quit\s*\(\s*(\d+)\s*\)\s*;)");
-	std::smatch match;
-	if (std::regex_search(source, match, pattern)) {
+	const std::regex pattern(R"(quit\s*\(\s*(\d+)\s*\)\s*;)");
+	if (std::smatch match; std::regex_search(source, match, pattern)) {
 		ASTNode node;
 		node.exitCode = stoi(match[1].str());
 		return node;
@@ -103,7 +102,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	std::cout << "Comilation finished.\nExecutable: " << outputFilename << std::endl;
+	std::cout << "Compilation finished.\nExecutable: " << outputFilename << std::endl;
 
 	if (argc >= 3) {
 		std::string option = argv[2];
